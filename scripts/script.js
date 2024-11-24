@@ -7,7 +7,7 @@ const gameDifficultyLevelNames = {
     CUSTOM: "CUSTOM",
 }
 const minesweeperModel = {
-    selectedDifficultyLevel: gameDifficultyLevelNames.PROFESSIONAL,
+    selectedDifficultyLevel: gameDifficultyLevelNames.AMATEUR,
     field: [],
 
 };
@@ -65,3 +65,29 @@ function initGame(){
     }
     return createField(...gameDifficultyLevels[minesweeperModel.selectedDifficultyLevel]);
 }
+
+function renderField(){
+    const minesweeperField = document.getElementById("minesweeper-field");
+    const rows = minesweeperModel.field.length;
+    const collums = minesweeperModel.field[0].length;
+    
+    const mfHdR = (document.getElementById("background").clientHeight-250)/rows;
+    const mfWdC = (document.getElementById("background").clientWidth-250)/collums;
+    
+    const squareSide = mfHdR < mfWdC ? mfHdR : mfWdC;
+    
+    minesweeperField.style.width = collums*squareSide + "px";
+    minesweeperField.style.height = rows*squareSide + "px";
+    for(let i = 0; i < rows; i++){
+        for(let j = 0; j < collums; j++){
+            const square = document.createElement("div");
+            square.setAttribute("coordinateX",`${i}`);
+            square.setAttribute("coordinateY",`${j}`);
+            square.classList.add("square");
+            square.style.height = square.style.width = squareSide +"px";
+            minesweeperField.appendChild(square);
+        }
+    }
+}
+initGame();
+renderField();
