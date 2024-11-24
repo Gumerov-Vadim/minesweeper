@@ -1,0 +1,32 @@
+body {
+    margin: 0;
+    overflow: hidden;
+  }
+  
+#background {
+    top:0;
+    left: 0;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background: #3E1E68;
+    z-index: -101;
+}
+#background span{
+    width: 20vmin;
+    height: 20vmin;
+    border-radius: 20vmin;
+    position: absolute;
+    animation-name: move;
+    animation-duration: 6s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    backface-visibility: hidden;
+    z-index: -100;
+}
+  
+  @keyframes move {
+    100% {
+      transform: translate3d(0, 0, 1px) rotate(360deg);
+    }
+  }
