@@ -14,7 +14,7 @@ const colors = [
     "#E45A84",
     "#FFACAC"
     ];
-  for( let span of spans){
+  for(let span of spans){
     let style = span.style; 
     style.color = colors[Math.floor(Math.random()*3)];
     style.top = Math.random()*100+"%";
