@@ -1,6 +1,6 @@
-let particleSize = "20vmin";
-let animationDuration = "6s";
-let amount = 20;
+const particleSize = "20vmin";
+const animationDuration = "6s";
+const amount = 20;
 const background = document.getElementById("background");
 
 for(let i = 0; i < amount; i++){
