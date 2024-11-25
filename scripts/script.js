@@ -28,6 +28,7 @@ const numberColors = {
     8: "#5F9EA0",
 }
 
+
 const minesweeperModel = {
     selectedDifficultyLevel: gameDifficultyLevelNames.PROFESSIONAL,
     field: [],
@@ -134,7 +135,7 @@ function rightClickHandler(e){
     e.preventDefault();
     const x = +e.srcElement.getAttribute("coordinatex");
     const y = +e.srcElement.getAttribute("coordinatey");
-    
+    console.log(e);
 }
 
 function renderField(){

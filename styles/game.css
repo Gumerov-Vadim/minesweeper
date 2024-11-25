@@ -6,7 +6,7 @@
 #game-header{
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
 }
 #control-buttons{
@@ -23,6 +23,20 @@
 }
 .button{
     cursor: pointer;
+    height: 40px;
+    width: 40px;
+    background-size: cover;
+}
+#control-buttons .button:hover{
+    animation-name: rotation;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+@keyframes rotation {
+    100%{
+        transform: rotate(360deg);
+    }
 }
 .square{
     border-radius: 5px;
@@ -41,9 +55,18 @@
 }
 
 .activated-square{
-    font-size: 20px;
+    font-size: calc(1em + 1vw);
     background-color: rgba(255,255,255,0.55);
     text-align: center;
     user-select: none;
     text-shadow: 1px 1px 2px black;
+}
+a{
+    color: white;
+}
+#reset-button{
+    background-image: url("../images/reset.png");
+}
+#settings-button{
+    background-image: url("../images/settings.png");
 }
