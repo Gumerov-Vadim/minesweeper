@@ -28,6 +28,20 @@ const numberColors = {
     8: "#5F9EA0",
 }
 
+const mineStates = {
+    NON_ACTIVE: "non-active",
+    ACTIVATED: "activated",
+    FLAGGED: "flagged",
+    INQUESTION: "inquestion",
+}
+//TODO:
+// добавить состояние для квадратов отмеченные флагов вопросом или без этих знаков
+// добавить переключение состояния с помощью генератора
+
+// TODO:
+// добавить проверку на победу
+// для этого после каждого клика нужно проверять состояние всех квадратов
+// если все активированы кроме мин = победа
 
 const minesweeperModel = {
     selectedDifficultyLevel: gameDifficultyLevelNames.PROFESSIONAL,
@@ -48,7 +62,7 @@ const gameController = {
 
         this.showSquare(x,y);
 
-        if(minesweeperModel.field[x][y] === 0){
+        if(+minesweeperModel.field[x][y] === 0){
             getNearestSquareCoordinates(x,y).filter(square => minesweeperModel.field[square[0]] != null && minesweeperModel.field[square[0]][square[1]] != null).forEach(squareCoordinate=>this.squareActivateHandler(...squareCoordinate)) 
             // setTimeout(()=>{
             // },100);
@@ -56,10 +70,14 @@ const gameController = {
     },
     showSquare: function(x,y){
         const square = getSquareElement(x,y);
-        square.innerHTML = minesweeperModel.field[x][y] === 0 ? "" : minesweeperModel.field[x][y];
-        square.style.color = numberColors[minesweeperModel.field[x][y]];
+        const mineField = minesweeperModel.field[x][y];
+        square.innerHTML = +mineField === 0 ? "" : +mineField;
+        square.style.color = numberColors[+mineField];
+        
         square.classList.remove("non-activated-square");
         square.classList.add("activated-square");
+
+        // mineField.state = mineStates.ACTIVATED;
     },
     finishGame: function(isWin){
         if(isWin){
@@ -114,11 +132,20 @@ function initGame(){
         for(let i = 0; i < squaresCount; i++){
             const y = Math.floor(i/rows);
             const x = i%rows;
-            if(isMineHere(x,y)){
-            minesweeperModel.field[x][y] = 9; // 9 = mine
-            continue;
-            }
-            minesweeperModel.field[x][y] = getCountMinesAround(x,y);
+            minesweeperModel.field[x][y] = {
+                value: isMineHere(x,y) ? 9 : minesweeperModel.field[x][y] = getCountMinesAround(x,y), // 9 = mine 
+                state: mineStates.NON_ACTIVE,
+                [Symbol.toPrimitive](hint){
+                    switch(hint){
+                        case "number":
+                            return this.value;
+                        case "string":
+                            return this.state;
+                        default:
+                            return Error("Ошибка при преобразовании объекта мины в примитив");
+                    }
+                }
+            };
         }
         return minesweeperModel.field;
     }
