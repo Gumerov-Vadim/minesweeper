@@ -46,28 +46,39 @@ const minesweeperModel = {
     minesCounter: 0,
     timer: null,
 };
+
+function Timer(){
+    const savedThis = this;
+    this.interval = setInterval(()=>{savedThis.updateTimer()},1000);
+    this.start = Date.now();
+    this.getCurrentTime = function(){
+        const date = new Date(Date.now() - savedThis.start);
+        return {
+            min: date.getMinutes(),
+            sec: date.getSeconds(),
+        }
+    };
+    this.updateTimer = function(){
+        const timerElement = document.getElementById("timer");
+        const time = this.getCurrentTime();
+        timerElement.innerHTML = `${time.min}:${time.sec < 10 ? "0" + time.sec : time.sec}`;
+    };
+    this.restartTimer = function(){
+        this.start = Date.now();
+        this.interval = setInterval(()=>{savedThis.updateTimer()},1000);    
+    };
+    this.stopTimer = function(){
+        clearInterval(this.interval);
+    }
+}
+
 function getSquareElement(x,y){
     return document.querySelector(`[coordinatex="${x}"][coordinatey="${y}"]`);
 }
 const gameController = {
     squareActivateHandler: function(x,y){
         if(!minesweeperModel.timer) {
-            minesweeperModel.timer = {
-                interval: setInterval(()=>{minesweeperModel.timer.updateTimer()},1000),
-                start: Date.now(),
-                getCurrentTime: function(){
-                    const date = new Date(Date.now() - minesweeperModel.timer.start);
-                    return {
-                        min: date.getMinutes(),
-                        sec: date.getSeconds(),
-                    }
-                },
-                updateTimer: function(){
-                    const timerElement = document.getElementById("timer");
-                    const time = this.getCurrentTime();
-                    timerElement.innerHTML = `${time.min}:${time.sec < 10 ? "0" + time.sec : time.sec}`;
-                }
-            }
+            minesweeperModel.timer = new Timer();
         }
 
         const square = getSquareElement(x,y);
