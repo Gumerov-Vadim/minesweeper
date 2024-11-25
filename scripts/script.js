@@ -41,9 +41,10 @@ const mineStates = {
 // если все активированы кроме мин = победа
 
 const minesweeperModel = {
-    selectedDifficultyLevel: gameDifficultyLevelNames.PROFESSIONAL,
+    selectedDifficultyLevel: gameDifficultyLevelNames.BEGINNER,
     field: [],
     minesCounter: 0,
+    timer: null,
 };
 function getSquareElement(x,y){
     return document.querySelector(`[coordinatex="${x}"][coordinatey="${y}"]`);
@@ -89,6 +90,7 @@ const gameController = {
             case mineStates.FLAGGED:
                 mineField.state = mineStates.INQUESTION;
                 square.style.backgroundImage = `url(images/question.png)`;
+                this.increaseMinesCounter();
                 return true;
             case mineStates.INQUESTION:
                 mineField.state = mineStates.NON_ACTIVE;
@@ -97,6 +99,7 @@ const gameController = {
             case mineStates.NON_ACTIVE:
                 mineField.state = mineStates.FLAGGED;
                 square.style.backgroundImage = `url(images/flag.png)`;
+                this.decreaseMinesCounter();
                 return true;
         }
         
