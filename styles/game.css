@@ -41,7 +41,9 @@
 }
 
 .activated-square{
+    font-size: 20px;
     background-color: rgba(255,255,255,0.55);
     text-align: center;
     user-select: none;
+    text-shadow: 1px 1px 2px black;
 }

@@ -16,6 +16,18 @@ const gameDifficultyLevels = {
     CUSTOM: [100,100,1000],
 }
 
+const numberColors = {
+    0: "#FFFFFF",
+    1: "#1E90FF",
+    2: "#9ACD32",
+    3: "#FF0000",
+    4: "#0000FF",
+    5: "#B22222",
+    6: "#00FA9A",
+    7: "#4B0082",
+    8: "#5F9EA0",
+}
+
 const minesweeperModel = {
     selectedDifficultyLevel: gameDifficultyLevelNames.PROFESSIONAL,
     field: [],
@@ -43,16 +55,16 @@ const gameController = {
     },
     showSquare: function(x,y){
         const square = getSquareElement(x,y);
-        square.innerHTML = minesweeperModel.field[x][y];
-        
+        square.innerHTML = minesweeperModel.field[x][y] === 0 ? "" : minesweeperModel.field[x][y];
+        square.style.color = numberColors[minesweeperModel.field[x][y]];
         square.classList.remove("non-activated-square");
         square.classList.add("activated-square");
     },
     finishGame: function(isWin){
         if(isWin){
-            // ура победа
+            console.log("win");
         } else {
-            // луз
+            console.log("lose");
         }
     }
 }
