@@ -25,17 +25,23 @@
     cursor: pointer;
 }
 .square{
-    background-color: rgba(170,170,230,0.85);
     border-radius: 5px;
     margin: 1px;
 }
-.square:hover{
+.non-activated-square{
+    background-color: rgba(170,170,230,0.85);
+}
+
+.non-activated-square:hover{
     background-color: rgba(150,160,255,0.95);
     cursor: pointer;
 }
-.square:active{
+.non-activated-square:active{
     background-color: rgba(200,210,255,0.85);
 }
-.clicked-square{
+
+.activated-square{
     background-color: rgba(255,255,255,0.55);
+    text-align: center;
+    user-select: none;
 }

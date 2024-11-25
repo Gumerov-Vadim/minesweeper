@@ -6,11 +6,7 @@ const gameDifficultyLevelNames = {
     SUPERHUMAN: "SUPERHUMAN", 
     CUSTOM: "CUSTOM",
 }
-const minesweeperModel = {
-    selectedDifficultyLevel: gameDifficultyLevelNames.BEGINNER,
-    field: [],
 
-};
 const gameDifficultyLevels = {
     //game difficulty : [collums, rows, mines]
     BEGINNER: [9,9,10],
@@ -18,6 +14,59 @@ const gameDifficultyLevels = {
     PROFESSIONAL: [30,16,99],
     SUPERHUMAN: [50,50,500], 
     CUSTOM: [100,100,1000],
+}
+
+const minesweeperModel = {
+    selectedDifficultyLevel: gameDifficultyLevelNames.PROFESSIONAL,
+    field: [],
+};
+function getSquareElement(x,y){
+    return document.querySelector(`[coordinatex="${x}"][coordinatey="${y}"]`);
+}
+const gameController = {
+    squareActivateHandler: function(x,y){
+        const square = getSquareElement(x,y);
+        if(square.classList.contains("activated-square")) return false;
+
+        if(minesweeperModel.field[x][y] === 9){
+            this.finishGame(false);
+            return false;
+        } 
+
+        this.showSquare(x,y);
+
+        if(minesweeperModel.field[x][y] === 0){
+            getNearestSquareCoordinates(x,y).filter(square => minesweeperModel.field[square[0]] != null && minesweeperModel.field[square[0]][square[1]] != null).forEach(squareCoordinate=>this.squareActivateHandler(...squareCoordinate)) 
+            // setTimeout(()=>{
+            // },100);
+        }
+    },
+    showSquare: function(x,y){
+        const square = getSquareElement(x,y);
+        square.innerHTML = minesweeperModel.field[x][y];
+        
+        square.classList.remove("non-activated-square");
+        square.classList.add("activated-square");
+    },
+    finishGame: function(isWin){
+        if(isWin){
+            // ура победа
+        } else {
+            // луз
+        }
+    }
+}
+function getNearestSquareCoordinates(x,y){
+    return [
+        [x + 1, y],
+        [x, y + 1],
+        [x - 1, y],
+        [x, y - 1],
+        [x + 1, y + 1],
+        [x - 1, y - 1],
+        [x + 1, y - 1],
+        [x - 1, y + 1],
+    ]
 }
 
 function initGame(){
@@ -41,14 +90,11 @@ function initGame(){
 
         function getCountMinesAround(x,y){
             let count = 0;
-            if(isMineHere(x + 1, y)) ++count;
-            if(isMineHere(x, y + 1)) ++count;
-            if(isMineHere(x - 1, y)) ++count;
-            if(isMineHere(x, y - 1)) ++count;
-            if(isMineHere(x + 1, y + 1)) ++count;
-            if(isMineHere(x - 1, y - 1)) ++count;
-            if(isMineHere(x + 1, y - 1)) ++count;
-            if(isMineHere(x - 1, y + 1)) ++count;
+            const nearestSquares = getNearestSquareCoordinates(x,y);
+            nearestSquares.forEach(squareCoordinate => {
+                if(isMineHere(...squareCoordinate)) ++count;
+            });
+            
             return count;
         }
 
@@ -66,10 +112,17 @@ function initGame(){
     return createField(...gameDifficultyLevels[minesweeperModel.selectedDifficultyLevel]);
 }
 
-function clickHandler(e){
-    const x = e.srcElement.getAttribute("coordinatex");
-    const y = e.srcElement.getAttribute("coordinatey");
-    console.log(`x: ${x}, y:${y}`);
+function leftClickHandler(e){
+    const x = +e.srcElement.getAttribute("coordinatex");
+    const y = +e.srcElement.getAttribute("coordinatey");
+    gameController.squareActivateHandler(x,y);
+}
+
+function rightClickHandler(e){
+    e.preventDefault();
+    const x = +e.srcElement.getAttribute("coordinatex");
+    const y = +e.srcElement.getAttribute("coordinatey");
+    
 }
 
 function renderField(){
@@ -84,15 +137,20 @@ function renderField(){
     
     minesweeperField.style.width = collums*(2+squareSide) + "px";
     minesweeperField.style.height = rows*(2+squareSide) + "px";
+    
     for(let i = 0; i < rows; i++){
         for(let j = 0; j < collums; j++){
             const square = document.createElement("div");
             square.setAttribute("coordinateX",`${i}`);
             square.setAttribute("coordinateY",`${j}`);
+            
             square.classList.add("square");
+            square.classList.add("non-activated-square");
+
             square.style.height = square.style.width = squareSide +"px";
 
-            square.addEventListener('click',clickHandler);
+            square.addEventListener('click',leftClickHandler);
+            square.addEventListener('contextmenu',rightClickHandler);
 
             minesweeperField.appendChild(square);
         }
