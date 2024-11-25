@@ -39,18 +39,8 @@ const mineStates = {
 // добавить проверку на победу
 // для этого после каждого клика нужно проверять состояние всех квадратов
 // если все активированы кроме мин = победа
-
-const minesweeperModel = {
-    selectedDifficultyLevel: gameDifficultyLevelNames.BEGINNER,
-    field: [],
-    minesCounter: 0,
-    timer: null,
-};
-
 function Timer(){
     const savedThis = this;
-    this.interval = setInterval(()=>{savedThis.updateTimer()},1000);
-    this.start = Date.now();
     this.getCurrentTime = function(){
         const date = new Date(Date.now() - savedThis.start);
         return {
@@ -69,16 +59,26 @@ function Timer(){
     };
     this.stopTimer = function(){
         clearInterval(this.interval);
+    };
+    this.isStarted = function(){
+        return this.interval != null;
     }
 }
+
+const minesweeperModel = {
+    selectedDifficultyLevel: gameDifficultyLevelNames.BEGINNER,
+    field: [],
+    minesCounter: 0,
+    timer: new Timer(),
+};
 
 function getSquareElement(x,y){
     return document.querySelector(`[coordinatex="${x}"][coordinatey="${y}"]`);
 }
 const gameController = {
     squareActivateHandler: function(x,y){
-        if(!minesweeperModel.timer) {
-            minesweeperModel.timer = new Timer();
+        if(!minesweeperModel.timer.isStarted()) {
+            minesweeperModel.timer.restartTimer();
         }
 
         const square = getSquareElement(x,y);
