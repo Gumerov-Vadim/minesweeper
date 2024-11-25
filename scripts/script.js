@@ -43,7 +43,7 @@ const mineStates = {
 const minesweeperModel = {
     selectedDifficultyLevel: gameDifficultyLevelNames.PROFESSIONAL,
     field: [],
-    minesLeft: 0,
+    minesCounter: 0,
 };
 function getSquareElement(x,y){
     return document.querySelector(`[coordinatex="${x}"][coordinatey="${y}"]`);
@@ -100,6 +100,12 @@ const gameController = {
                 return true;
         }
         
+    },
+    increaseMinesCounter: function(x,y){
+        document.querySelector("#mines-left span").innerHTML = ++minesweeperModel.minesCounter;
+    },
+    decreaseMinesCounter: function(x,y){
+        document.querySelector("#mines-left span").innerHTML = --minesweeperModel.minesCounter;
     },
     finishGame: function(isWin){
         if(isWin){
@@ -169,7 +175,7 @@ function initGame(){
                 }
             };
         }
-        minesweeperModel.minesLeft = gameDifficultyLevels[minesweeperModel.selectedDifficultyLevel][2];
+        minesweeperModel.minesCounter = gameDifficultyLevels[minesweeperModel.selectedDifficultyLevel][2];
         return minesweeperModel.field;
     }
     return createField(...gameDifficultyLevels[minesweeperModel.selectedDifficultyLevel]);
@@ -218,6 +224,7 @@ function renderField(){
             minesweeperField.appendChild(square);
         }
     }
+    document.querySelector("#mines-left span").innerHTML = minesweeperModel.minesCounter;
 }
 initGame();
 renderField();
