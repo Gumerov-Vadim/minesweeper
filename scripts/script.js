@@ -51,6 +51,25 @@ function getSquareElement(x,y){
 }
 const gameController = {
     squareActivateHandler: function(x,y){
+        if(!minesweeperModel.timer) {
+            minesweeperModel.timer = {
+                interval: setInterval(()=>{minesweeperModel.timer.updateTimer()},1000),
+                start: Date.now(),
+                getCurrentTime: function(){
+                    const date = new Date(Date.now() - minesweeperModel.timer.start);
+                    return {
+                        min: date.getMinutes(),
+                        sec: date.getSeconds(),
+                    }
+                },
+                updateTimer: function(){
+                    const timerElement = document.getElementById("timer");
+                    const time = this.getCurrentTime();
+                    timerElement.innerHTML = `${time.min}:${time.sec < 10 ? "0" + time.sec : time.sec}`;
+                }
+            }
+        }
+
         const square = getSquareElement(x,y);
         if(minesweeperModel.field[x][y].state === mineStates.ACTIVATED || minesweeperModel.field[x][y].state === mineStates.FLAGGED) return false;
 
