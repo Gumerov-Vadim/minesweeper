@@ -51,7 +51,7 @@ function getSquareElement(x,y){
 const gameController = {
     squareActivateHandler: function(x,y){
         const square = getSquareElement(x,y);
-        if(square.classList.contains("activated-square")) return false;
+        if(minesweeperModel.field[x][y].state === mineStates.ACTIVATED || minesweeperModel.field[x][y].state === mineStates.FLAGGED) return false;
 
         if(minesweeperModel.field[x][y] === 9){
             this.finishGame(false);
@@ -69,13 +69,37 @@ const gameController = {
     showSquare: function(x,y){
         const square = getSquareElement(x,y);
         const mineField = minesweeperModel.field[x][y];
+        
         square.innerHTML = +mineField === 0 ? "" : +mineField;
         square.style.color = numberColors[+mineField];
-        
+        square.style.backgroundImage = 'none';
         square.classList.remove("non-activated-square");
         square.classList.add("activated-square");
 
-        // mineField.state = mineStates.ACTIVATED;
+        mineField.state = mineStates.ACTIVATED;
+    },
+    switchState: function(x,y){
+        const mineField = minesweeperModel.field[x][y];
+        // if(mineField.state === mineStates.ACTIVATED) return false;
+        
+        const square = getSquareElement(x,y);
+        switch(mineField.state){
+            case mineStates.ACTIVATED:
+                return false;
+            case mineStates.FLAGGED:
+                mineField.state = mineStates.INQUESTION;
+                square.style.backgroundImage = `url(images/question.png)`;
+                return true;
+            case mineStates.INQUESTION:
+                mineField.state = mineStates.NON_ACTIVE;
+                square.style.backgroundImage = `none`;
+                return true;
+            case mineStates.NON_ACTIVE:
+                mineField.state = mineStates.FLAGGED;
+                square.style.backgroundImage = `url(images/flag.png)`;
+                return true;
+        }
+        
     },
     finishGame: function(isWin){
         if(isWin){
@@ -140,7 +164,7 @@ function initGame(){
                         case "string":
                             return this.state;
                         default:
-                            return Error("Ошибка при преобразовании объекта мины в примитив");
+                            return Error("Symbol to primitive");
                     }
                 }
             };
@@ -161,7 +185,7 @@ function rightClickHandler(e){
     e.preventDefault();
     const x = +e.srcElement.getAttribute("coordinatex");
     const y = +e.srcElement.getAttribute("coordinatey");
-    console.log(e);
+    gameController.switchState(x,y);
 }
 
 function renderField(){

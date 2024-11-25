@@ -43,6 +43,7 @@
     margin: 1px;
 }
 .non-activated-square{
+    background-size: cover;
     background-color: rgba(170,170,230,0.85);
 }
 
