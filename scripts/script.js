@@ -54,7 +54,7 @@ const gameController = {
         const square = getSquareElement(x,y);
         if(minesweeperModel.field[x][y].state === mineStates.ACTIVATED || minesweeperModel.field[x][y].state === mineStates.FLAGGED) return false;
 
-        if(minesweeperModel.field[x][y] === 9){
+        if(+minesweeperModel.field[x][y] === 9){
             this.finishGame(false);
             return false;
         } 
@@ -62,10 +62,11 @@ const gameController = {
         this.showSquare(x,y);
 
         if(+minesweeperModel.field[x][y] === 0){
-            getNearestSquareCoordinates(x,y).filter(square => minesweeperModel.field[square[0]] != null && minesweeperModel.field[square[0]][square[1]] != null).forEach(squareCoordinate=>this.squareActivateHandler(...squareCoordinate)) 
-            // setTimeout(()=>{
-            // },100);
+            setTimeout(()=>{
+                getNearestSquareCoordinates(x,y).filter(square => minesweeperModel.field[square[0]] != null && minesweeperModel.field[square[0]][square[1]] != null).forEach(squareCoordinate=>this.squareActivateHandler(...squareCoordinate)) 
+            },25);
         }
+        return true;
     },
     showSquare: function(x,y){
         const square = getSquareElement(x,y);
