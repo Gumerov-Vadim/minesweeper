@@ -34,9 +34,6 @@ const mineStates = {
     FLAGGED: "flagged",
     INQUESTION: "inquestion",
 }
-//TODO:
-// добавить состояние для квадратов отмеченные флагов вопросом или без этих знаков
-// добавить переключение состояния с помощью генератора
 
 // TODO:
 // добавить проверку на победу
@@ -46,6 +43,7 @@ const mineStates = {
 const minesweeperModel = {
     selectedDifficultyLevel: gameDifficultyLevelNames.PROFESSIONAL,
     field: [],
+    minesLeft: 0,
 };
 function getSquareElement(x,y){
     return document.querySelector(`[coordinatex="${x}"][coordinatey="${y}"]`);
@@ -147,6 +145,7 @@ function initGame(){
                 }
             };
         }
+        minesweeperModel.minesLeft = gameDifficultyLevels[minesweeperModel.selectedDifficultyLevel][2];
         return minesweeperModel.field;
     }
     return createField(...gameDifficultyLevels[minesweeperModel.selectedDifficultyLevel]);
