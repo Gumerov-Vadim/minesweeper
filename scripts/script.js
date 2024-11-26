@@ -91,11 +91,16 @@ const gameController = {
 
         this.showSquare(x,y);
 
+        if(this.isWinCondition()){
+            this.finishGame(true);
+        }
+
         if(+minesweeperModel.field[x][y] === 0){
             setTimeout(()=>{
                 getNearestSquareCoordinates(x,y).filter(square => minesweeperModel.field[square[0]] != null && minesweeperModel.field[square[0]][square[1]] != null).forEach(squareCoordinate=>this.squareActivateHandler(...squareCoordinate)) 
             },25);
         }
+        
         return true;
     },
     showSquare: function(x,y){
@@ -140,6 +145,9 @@ const gameController = {
     },
     decreaseMinesCounter: function(x,y){
         document.querySelector("#mines-left span").innerHTML = --minesweeperModel.minesCounter;
+    },
+    isWinCondition: function(){
+        return minesweeperModel.field.every(row => row.every(s => s.state === mineStates.ACTIVATED && +s !== 9 || s.state !== mineStates.ACTIVATED && +s ===9));
     },
     finishGame: function(isWin){
         if(isWin){
