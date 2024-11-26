@@ -35,10 +35,6 @@ const mineStates = {
     INQUESTION: "inquestion",
 }
 
-// TODO:
-// добавить проверку на победу
-// для этого после каждого клика нужно проверять состояние всех квадратов
-// если все активированы кроме мин = победа
 function Timer(){
     const savedThis = this;
     this.getCurrentTime = function(){
@@ -165,6 +161,45 @@ const gameController = {
                 squareElement.removeEventListener('contextmenu',rightClickHandler);
                 squareElement.removeEventListener('click',leftClickHandler);
             }
+
+            const squaresWithMine = Array.from(squareElements).filter(se =>{
+                const x = +se.getAttribute("coordinatex");
+                const y = +se.getAttribute("coordinatey");
+                return +minesweeperModel.field[x][y] === 9;
+            });
+            
+            squaresWithMine.forEach(el=>{
+                const mineIMG = document.createElement("img");
+                mineIMG.src = "images/mine.png";
+                mineIMG.classList.add("mine");
+                mineIMG.draggable = false;
+                el.appendChild(mineIMG);
+            });
+
+            squaresWithMine.forEach(el=>{
+                const delay = Math.random()*1000;
+                
+                setTimeout(()=>{
+
+                    const explosionEffect = document.createElement("img");
+                    explosionEffect.src = "images/explosion.gif?" + new Date().getTime();;
+                    explosionEffect.classList.add("explosion");
+                    explosionEffect.draggable = false;
+                    el.appendChild(explosionEffect);
+                    
+                    const soundEffect = document.createElement("audio");
+                    soundEffect.autoplay = true;
+                    soundEffect.src = "sounds/explosion.mp3";
+                    el.appendChild(soundEffect);
+
+                setTimeout(()=>{
+                    el.removeChild(explosionEffect)
+                    el.removeChild(soundEffect);
+                },1000);
+                
+            },delay);
+            })
+
         }
 
         if(isWin){
