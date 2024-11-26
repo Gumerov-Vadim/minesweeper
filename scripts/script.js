@@ -151,23 +151,35 @@ const gameController = {
         return minesweeperModel.field.every(row => row.every(s => s.state === mineStates.ACTIVATED && +s !== 9 || s.state !== mineStates.ACTIVATED && +s ===9));
     },
     finishGame: function(isWin){
+        
+        const squareElements = document.getElementsByClassName("square");
+
         function goodFinishScene(){
 
         }
         
         function badFinishScene(){
-            const squareElements = document.getElementsByClassName("square");
-            for(let squareElement of squareElements){
-                squareElement.removeEventListener('contextmenu',rightClickHandler);
-                squareElement.removeEventListener('click',leftClickHandler);
-            }
-
             const squaresWithMine = Array.from(squareElements).filter(se =>{
                 const x = +se.getAttribute("coordinatex");
                 const y = +se.getAttribute("coordinatey");
                 return +minesweeperModel.field[x][y] === 9;
             });
             
+            const squaresWithWrongFlags = Array.from(squareElements).filter(se =>{
+                const x = +se.getAttribute("coordinatex");
+                const y = +se.getAttribute("coordinatey");
+                return +minesweeperModel.field[x][y] !== 9 && minesweeperModel.field[x][y].state === mineStates.FLAGGED;
+            });
+
+            squaresWithWrongFlags.forEach(el=>{
+                const wrongFlagIMG = document.createElement("img");
+                wrongFlagIMG.src = "images/cross-mark.png";
+                wrongFlagIMG.classList.add("mine");
+                wrongFlagIMG.draggable = false;
+                wrongFlagIMG.style.opacity = 0.5;
+                el.appendChild(wrongFlagIMG);
+            });
+
             squaresWithMine.forEach(el=>{
                 const mineIMG = document.createElement("img");
                 mineIMG.src = "images/mine.png";
@@ -209,6 +221,11 @@ const gameController = {
             badFinishScene();
         }
         
+        for(let squareElement of squareElements){
+            squareElement.removeEventListener('contextmenu',rightClickHandler);
+            squareElement.removeEventListener('click',leftClickHandler);
+        }
+
         minesweeperModel.timer.stopTimer();
     }
 }
