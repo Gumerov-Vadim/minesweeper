@@ -42,6 +42,7 @@
     border-radius: 5px;
     margin: 1px;
     position: relative;
+    overflow: hidden;
 }
 .non-activated-square{
     background-size: cover;
@@ -98,4 +99,21 @@ a{
     left: 0;
     top: 0;
     z-index: 2;
+}
+.win-effect{
+    width: 10%;
+    height: 150%;
+    background: rgb(0,212,255);
+    animation-name: translateWinEffect;
+    animation-duration: 3s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: 1;
+}
+@keyframes translateWinEffect {
+    from{
+        transform: rotate(135deg) scale(1.5) translateX(20px);
+    }
+    to{
+        transform: rotate(135deg) scale(1.5) translateX(-120px);
+    }
 }

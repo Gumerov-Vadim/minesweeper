@@ -155,7 +155,20 @@ const gameController = {
         const squareElements = document.getElementsByClassName("square");
 
         function goodFinishScene(){
+            const nonActivatedSquares = Array.from(squareElements).filter(se =>{
+                const x = +se.getAttribute("coordinatex");
+                const y = +se.getAttribute("coordinatey");
+                return minesweeperModel.field[x][y].state !== mineStates.ACTIVATED;
+            });
+            nonActivatedSquares.forEach(el=>{
+                const winEffect = document.createElement("div");
+                winEffect.classList.add("win-effect");
+                winEffect.addEventListener('animationend', () => {
+                    winEffect.remove(); 
+                });
 
+                el.appendChild(winEffect);
+            })
         }
         
         function badFinishScene(){
@@ -215,9 +228,8 @@ const gameController = {
         }
 
         if(isWin){
-            console.log("win");
+            goodFinishScene();
         } else {
-            console.log("lose");
             badFinishScene();
         }
         
