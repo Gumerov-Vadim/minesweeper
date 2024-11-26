@@ -144,3 +144,8 @@ a{
     top: 5px;
     background-image: url("../images/quit-settings.png");
 }
+
+#smile-icon{
+    font-size: 20px;
+    transform: rotate(90deg);
+}

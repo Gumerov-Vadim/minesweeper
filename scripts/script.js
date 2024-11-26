@@ -32,6 +32,16 @@ const mineStates = {
     FLAGGED: "flagged",
     INQUESTION: "inquestion",
 }
+const smiles = {
+    smile:":)",
+    suprised:":O",
+    happy:":D",
+    win:"B)",
+    dead:"X(",
+}
+function changeSmile(smile){
+    document.getElementById("smile-icon").innerHTML = smile;
+}
 
 function Timer(){
     const savedThis = this;
@@ -92,9 +102,14 @@ const gameController = {
 
         if(this.isWinCondition()){
             this.finishGame(true);
+            return true;
         }
 
+        if(+minesweeperModel.field[x][y] > 4) changeSmile(smiles.suprised)
+        if(+minesweeperModel.field[x][y] <= 3) changeSmile(smiles.smile)
+
         if(+minesweeperModel.field[x][y] === 0){
+            changeSmile(smiles.happy);
             setTimeout(()=>{
                 getNearestSquareCoordinates(x,y).filter(square => minesweeperModel.field[square[0]] != null && minesweeperModel.field[square[0]][square[1]] != null).forEach(squareCoordinate=>this.squareActivateHandler(...squareCoordinate)) 
             },25);
@@ -167,9 +182,11 @@ const gameController = {
 
                 el.appendChild(winEffect);
             })
+            changeSmile(smiles.win);
         }
         
         function badFinishScene(){
+            changeSmile(smiles.dead);
             const squaresWithMine = Array.from(squareElements).filter(se =>{
                 const x = +se.getAttribute("coordinatex");
                 const y = +se.getAttribute("coordinatey");
@@ -357,6 +374,7 @@ function reset(){
     renderField();
     minesweeperModel.timer.resetTimer();
     minesweeperModel.timer.updateTimer();
+    changeSmile(smiles.smile);
 }
 const resetButton = document.getElementById("reset-button");
 resetButton.addEventListener('click',reset);
