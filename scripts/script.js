@@ -3,8 +3,7 @@ const gameDifficultyLevelNames = {
     BEGINNER: "BEGINNER",
     AMATEUR: "AMATEUR",
     PROFESSIONAL: "PROFESSIONAL",
-    SUPERHUMAN: "SUPERHUMAN", 
-    CUSTOM: "CUSTOM",
+    // CUSTOM: "CUSTOM",
 }
 
 const gameDifficultyLevels = {
@@ -12,8 +11,7 @@ const gameDifficultyLevels = {
     BEGINNER: [9,9,10],
     AMATEUR: [16,16,40],
     PROFESSIONAL: [30,16,99],
-    SUPERHUMAN: [50,50,500], 
-    CUSTOM: [100,100,1000],
+    // CUSTOM: [50,30,200],
 }
 
 const numberColors = {
@@ -363,5 +361,38 @@ function reset(){
 const resetButton = document.getElementById("reset-button");
 resetButton.addEventListener('click',reset);
 
+function initSettingElement(){
+    const levelList = document.getElementById("level-list");
+    for(let level in gameDifficultyLevelNames){
+        const selectLevelButton = document.createElement("div");
+        selectLevelButton.innerHTML = level;
+        selectLevelButton.classList.add("select-level-button");
+
+        if(level === minesweeperModel.selectedDifficultyLevel){
+            selectLevelButton.classList.add("selected-level");
+        }
+
+        selectLevelButton.addEventListener('click',()=>{
+            minesweeperModel.selectedDifficultyLevel = level;
+            reset();
+
+            Array.from(document.getElementsByClassName("selected-level")).forEach(el=>el.classList.remove("selected-level"));
+            selectLevelButton.classList.add("selected-level");
+        })
+
+        levelList.appendChild(selectLevelButton);
+    }
+    const settingsButton = document.getElementById("settings-button");
+    const settingsMenu = document.getElementById("setting-menu");
+    const quitSettingMenuButton = document.getElementById("quit-settings-button");
+
+    function toggleSettingMenu(){
+        settingsMenu.hidden = !settingsMenu.hidden;
+    }
+    settingsButton.addEventListener('click',toggleSettingMenu);
+    quitSettingMenuButton.addEventListener('click',toggleSettingMenu);
+}
+
 initGame();
+initSettingElement();
 renderField();

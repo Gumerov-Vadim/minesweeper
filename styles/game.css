@@ -117,3 +117,30 @@ a{
         transform: rotate(135deg) scale(1.5) translateX(-120px);
     }
 }
+
+#setting-menu{
+    border-radius: 10px;
+    color: white;
+    background-color: rgba(0,0,0,0.85);
+    padding: 50px;
+    position: absolute;
+    top: calc( 50% - 100px );
+    left: calc( 50% - 100px );
+    z-index: 999;
+}
+.select-level-button{
+    cursor: pointer;
+    margin: 5px 0;
+}
+.select-level-button:hover{
+    text-shadow: 0px 0px 5px #4ea8d8;
+}
+.selected-level{
+    text-shadow: 0px 0px 5px #A8FF2A;
+}
+#quit-settings-button{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    background-image: url("../images/quit-settings.png");
+}
