@@ -53,6 +53,11 @@ function Timer(){
         const time = this.getCurrentTime();
         timerElement.innerHTML = `${time.min}:${time.sec < 10 ? "0" + time.sec : time.sec}`;
     };
+    this.resetTimer = function(){
+        this.stopTimer();
+        this.interval = null;
+        this.start = Date.now();
+    };
     this.restartTimer = function(){
         this.start = Date.now();
         this.interval = setInterval(()=>{savedThis.updateTimer()},1000);    
@@ -150,11 +155,26 @@ const gameController = {
         return minesweeperModel.field.every(row => row.every(s => s.state === mineStates.ACTIVATED && +s !== 9 || s.state !== mineStates.ACTIVATED && +s ===9));
     },
     finishGame: function(isWin){
+        function goodFinishScene(){
+
+        }
+        
+        function badFinishScene(){
+            const squareElements = document.getElementsByClassName("square");
+            for(let squareElement of squareElements){
+                squareElement.removeEventListener('contextmenu',rightClickHandler);
+                squareElement.removeEventListener('click',leftClickHandler);
+            }
+        }
+
         if(isWin){
             console.log("win");
         } else {
             console.log("lose");
+            badFinishScene();
         }
+        
+        minesweeperModel.timer.stopTimer();
     }
 }
 function getNearestSquareCoordinates(x,y){
@@ -268,5 +288,16 @@ function renderField(){
     }
     document.querySelector("#mines-left span").innerHTML = minesweeperModel.minesCounter;
 }
+
+function reset(){
+    initGame();
+    document.getElementById("minesweeper-field").innerHTML = "";
+    renderField();
+    minesweeperModel.timer.resetTimer();
+    minesweeperModel.timer.updateTimer();
+}
+const resetButton = document.getElementById("reset-button");
+resetButton.addEventListener('click',reset);
+
 initGame();
 renderField();

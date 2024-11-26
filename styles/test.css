@@ -1,0 +1,89 @@
+.outer{
+    width: 110px;
+    height: 50px;
+    overflow:hidden
+}
+.inner{
+    width: 100px;
+    height: 100px;
+    border: 10px solid skyblue;
+    border-image: linear-gradient(to right top, blue, skyblue, blue);
+    border-image-slice: 1;
+    border-radius:50%;
+
+    animation-name: curve;
+    animation-duration: 3s;
+    animation-timing-function:ease-in;
+    animation-iteration-count: infinite;
+}
+@keyframes curve {
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+
+.box:before {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(28deg, #FFF000 25%, #ED008C 100% );
+    transform: translate3d(21px, 19px, 0) scale(1.1);
+    filter: blur(7px);
+    opacity: var(0.7);
+    transition: opacity 0.3s;
+    border-radius: inherit;
+    width: 100px;
+    height: 100px;
+}
+.box{
+    position: fixed;
+    z-index: -97;
+    border-radius: 50%;
+    animation-name: boxFloating;
+    animation-duration: 10s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+.box::after {
+    width: 100px;
+    height: 100px;
+    content: "";
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: inherit;
+    border-radius: inherit;
+}
+
+
+
+.box {
+    width: 150px;
+    height: 150px;
+    border: 2px solid green;
+    position: relative;
+    transform: translate(0);
+    transform-style: preserve-3d;
+    border-radius: 50%;
+  }
+  .shadow:before {
+    border-radius: 50%;
+    content:"";
+    position: absolute;
+    inset: 0;
+    transform: translate3d(0,0,-1px);
+    background: conic-gradient(from 90deg at 40% -25%, #ffd700, #f79d03, #ee6907, #e6390a, #de0d0d, #d61039, #cf1261, #c71585, #cf1261, #d61039, #de0d0d, #ee6907, #f79d03, #ffd700, #ffd700, #ffd700);
+    filter: blur(10px);
+    clip-path: polygon(-100vmax -100vmax,100vmax -100vmax,100vmax 100vmax,-100vmax 100vmax,-100vmax -100vmax,0 0,0 100%,100% 100%,100% 0,0 0);
+  }
