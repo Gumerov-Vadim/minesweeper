@@ -78,8 +78,8 @@ a{
     width: 50px;
     height: 50px;
 }
-#timer{
-    width: 100px;
+#game-header div:nth-child(2n+1){
+    width: 160px;
 }
 
 .mine{
